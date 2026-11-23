@@ -80,40 +80,6 @@ export default function Instagram() {
             </div>
           </div>
         </div>
-
-        {/* Story / Highlights Strip */}
-        <div className="mt-8 pt-6 border-t border-white/5">
-          <div className="text-[11px] uppercase tracking-wider text-slate-500 font-semibold mb-4 text-center sm:text-left">
-            Featured Highlights
-          </div>
-          <div className="flex items-center gap-4 sm:gap-6 overflow-x-auto pb-2 no-scrollbar justify-start sm:justify-start">
-            {[
-              { label: 'Hackathons', icon: '⚡' },
-              { label: 'AI/ML Lab',  icon: '🤖' },
-              { label: 'CP Sprints', icon: '🏆' },
-              { label: 'Workshops',  icon: '🎙️' },
-              { label: 'Campus Life',icon: '📸' },
-              { label: 'Chill Sessions', icon: '☕' }
-            ].map((story) => (
-              <a
-                key={story.label}
-                href={INSTAGRAM_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex flex-col items-center gap-2 shrink-0 group/story cursor-pointer"
-              >
-                <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-full p-[2px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 group-hover/story:scale-105 transition-transform duration-200">
-                  <div className="w-full h-full rounded-full bg-[#111322] border-2 border-[#090b14] flex items-center justify-center text-lg sm:text-xl">
-                    {story.icon}
-                  </div>
-                </div>
-                <span className="text-[11px] text-slate-400 group-hover/story:text-pink-300 font-medium transition-colors">
-                  {story.label}
-                </span>
-              </a>
-            ))}
-          </div>
-        </div>
       </div>
     </section>
   );
