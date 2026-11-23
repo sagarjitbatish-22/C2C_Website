@@ -160,19 +160,19 @@ Base URL: `http://127.0.0.1:5000`
 
 | Method | Route | Auth | Description |
 | --- | --- | :---: | --- |
-| `POST` | `/api/auth/register` | ❌ | Team member registration |
-| `POST` | `/api/auth/login` | ❌ | Team member login |
+| `POST` | `/api/auth/register` | ✅ | Team member registration |
+| `POST` | `/api/auth/login` | ✅ | Team member login |
 | `GET` | `/api/auth/me` | ✅ | Get current user |
-| `GET` | `/api/events` | ❌ | List all events |
+| `GET` | `/api/events` | ✅ | List all events |
 | `POST` | `/api/events` | ✅ | Create a new event |
-| `POST` | `/api/events/:id/rsvp` | ❌ | RSVP to an event |
-| `GET` | `/api/team` | ❌ | List all team members |
+| `POST` | `/api/events/:id/rsvp` | ✅ | RSVP to an event |
+| `GET` | `/api/team` | ✅ | List all team members |
 | `POST` | `/api/team` | ✅ | Add a team member |
-| `POST` | `/api/queries` | ❌ | Submit a query (public) |
+| `POST` | `/api/queries` | ✅ | Submit a query (public) |
 | `GET` | `/api/queries` | ✅ | View all queries (team) |
 | `PATCH` | `/api/queries/:id/reply` | ✅ | Reply to a query |
-| `GET` | `/api/instagram` | ❌ | Instagram feed and handle |
-| `GET` | `/api/health` | ❌ | Server health check |
+| `GET` | `/api/instagram` | ✅ | Instagram feed and handle |
+| `GET` | `/api/health` |✅| Server health check |
 
 Routes marked ✅ need the header `Authorization: Bearer <token>`.
 
