@@ -102,8 +102,8 @@ npm run dev
 
 | Service | URL |
 | --- | --- |
-| Frontend | http://localhost:5173 |
-| Backend | http://127.0.0.1:5000 |
+| Frontend | https://sagarjitbatish-22.github.io/C2C_Website/ |
+| Backend | https://c2c-website-xa40.onrender.com/ |
 
 Or run them separately in two terminals:
 
@@ -130,6 +130,18 @@ MONGO_URI=mongodb+srv://<user>:<password>@cluster.mongodb.net/code2chill
 2. Copy your connection string.
 3. Paste it into `MONGO_URI` in `server/.env`.
 4. Restart the server.
+
+## ☁️ Deployment (Render)
+
+The app is deployed on [Render](https://render.com).
+
+| Setting | Value |
+| --- | --- |
+| Build command | `npm install && npm install --prefix client && npm install --prefix server && npm run build --prefix client` |
+| Start command | `npm start --prefix server` |
+| Environment variables | `MONGO_URI` (your Atlas connection string) |
+
+> ⚠️ Without `MONGO_URI`, the app uses in-memory storage, so events, team members and queries **reset every time Render restarts or redeploys** the service. Set `MONGO_URI` for anything you want to keep.
 
 > ⚠️ Never commit real credentials. `.env` is already listed in `.gitignore`.
 
