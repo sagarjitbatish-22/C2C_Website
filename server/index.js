@@ -42,6 +42,17 @@ app.use('/api/team', teamRoutes);
 app.use('/api/queries', queryRoutes);
 app.use('/api/instagram', instagramRoutes);
 
+// Root welcome route
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    message: '🚀 Code2Chill API is running live!',
+    health: '/api/health',
+    team: '/api/team',
+    events: '/api/events'
+  });
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   const mongoose = require('mongoose');
