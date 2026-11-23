@@ -67,24 +67,24 @@ export default function QueryModal({ open, onClose }) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <input type="text" placeholder="Your Name *" required value={form.name}
                      onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
-                     className="bg-white/4 border border-white/8 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-600 focus:border-indigo-500/60 transition-all" />
+                     className="bg-[#131625] border border-slate-700/70 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none transition-all" />
               <input type="email" placeholder="Email *" required value={form.email}
                      onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
-                     className="bg-white/4 border border-white/8 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-600 focus:border-indigo-500/60 transition-all" />
+                     className="bg-[#131625] border border-slate-700/70 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none transition-all" />
               <input type="text" placeholder="Roll No. (optional)" value={form.rollNumber}
                      onChange={e => setForm(p => ({ ...p, rollNumber: e.target.value }))}
-                     className="bg-white/4 border border-white/8 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-600 focus:border-indigo-500/60 transition-all" />
+                     className="bg-[#131625] border border-slate-700/70 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none transition-all" />
               <select value={form.category} onChange={e => setForm(p => ({ ...p, category: e.target.value }))}
-                      className="bg-[#0F111A] border border-white/8 rounded-xl px-3 py-2 text-sm text-slate-300 focus:border-indigo-500/60 transition-all">
-                {CATEGORIES.map(c => <option key={c}>{c}</option>)}
+                      className="bg-[#131625] border border-slate-700/70 rounded-xl px-3 py-2 text-sm text-white focus:border-indigo-500 focus:outline-none transition-all">
+                {CATEGORIES.map(c => <option key={c} value={c} className="bg-[#131625] text-white">{c}</option>)}
               </select>
             </div>
             <input type="text" placeholder="Subject *" required value={form.subject}
                    onChange={e => setForm(p => ({ ...p, subject: e.target.value }))}
-                   className="bg-white/4 border border-white/8 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-600 focus:border-indigo-500/60 transition-all" />
+                   className="bg-[#131625] border border-slate-700/70 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none transition-all" />
             <textarea placeholder="Your message / question… *" required rows={3} value={form.message}
                       onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
-                      className="bg-white/4 border border-white/8 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-600 focus:border-indigo-500/60 transition-all resize-none" />
+                      className="bg-[#131625] border border-slate-700/70 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none transition-all resize-none" />
             {error && <p className="text-xs text-red-400">{error}</p>}
             <button type="submit" disabled={submitting}
                     className="py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold disabled:opacity-60 transition-all mt-1">

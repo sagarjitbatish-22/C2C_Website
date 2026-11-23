@@ -69,38 +69,63 @@ export default function AuthModal({ open, onClose }) {
           ))}
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-2.5">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           {mode === 'register' && (
             <>
-              <input type="text" placeholder="Full Name *" required value={form.name}
-                     onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
-                     className="bg-white/4 border border-white/8 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-600 focus:border-indigo-500/60 transition-all" />
-              <div className="grid grid-cols-2 gap-2">
-                <select value={form.role} onChange={e => setForm(p => ({ ...p, role: e.target.value }))}
-                        className="bg-[#0F111A] border border-white/8 rounded-xl px-3 py-2 text-sm text-slate-300 focus:border-indigo-500/60 transition-all">
-                  {['Team Member','Core Team','Design Lead','Tech Lead','Event Lead'].map(r => <option key={r}>{r}</option>)}
-                </select>
-                <select value={form.domain} onChange={e => setForm(p => ({ ...p, domain: e.target.value }))}
-                        className="bg-[#0F111A] border border-white/8 rounded-xl px-3 py-2 text-sm text-slate-300 focus:border-indigo-500/60 transition-all">
-                  {['Technical Core','AI/ML','Competitive Programming','Design & UI','Events & PR','Web Dev'].map(d => <option key={d}>{d}</option>)}
-                </select>
+              <div>
+                <label className="block text-[11px] font-medium text-slate-300 mb-1">Full Name</label>
+                <input type="text" placeholder="e.g. Sagarjit Singh" required value={form.name}
+                       onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
+                       className="w-full bg-[#131625] border border-slate-700/70 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all" />
               </div>
-              <input type="text" placeholder="Department (e.g. CSE)" value={form.department}
-                     onChange={e => setForm(p => ({ ...p, department: e.target.value }))}
-                     className="bg-white/4 border border-white/8 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-600 focus:border-indigo-500/60 transition-all" />
-              <input type="text" placeholder="Club Passcode (ask your lead)" value={form.clubKey}
-                     onChange={e => setForm(p => ({ ...p, clubKey: e.target.value }))}
-                     className="bg-white/4 border border-white/8 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-600 focus:border-indigo-500/60 transition-all font-mono" />
-              <p className="text-[10px] text-slate-600">Hint: ask your domain lead for the club passcode</p>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="block text-[11px] font-medium text-slate-300 mb-1">Role</label>
+                  <select value={form.role} onChange={e => setForm(p => ({ ...p, role: e.target.value }))}
+                          className="w-full bg-[#131625] border border-slate-700/70 rounded-xl px-2.5 py-2 text-xs text-white focus:border-indigo-500 focus:outline-none transition-all">
+                    {['Team Member','Core Team','Design Lead','Tech Lead','Event Lead'].map(r => <option key={r} value={r} className="bg-[#131625] text-white">{r}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[11px] font-medium text-slate-300 mb-1">Domain</label>
+                  <select value={form.domain} onChange={e => setForm(p => ({ ...p, domain: e.target.value }))}
+                          className="w-full bg-[#131625] border border-slate-700/70 rounded-xl px-2.5 py-2 text-xs text-white focus:border-indigo-500 focus:outline-none transition-all">
+                    {['Technical Core','AI/ML','Competitive Programming','Design & UI','Events & PR','Web Dev'].map(d => <option key={d} value={d} className="bg-[#131625] text-white">{d}</option>)}
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-medium text-slate-300 mb-1">Department</label>
+                <input type="text" placeholder="CSE" value={form.department}
+                       onChange={e => setForm(p => ({ ...p, department: e.target.value }))}
+                       className="w-full bg-[#131625] border border-slate-700/70 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all" />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-medium text-slate-300 mb-1">Club Passcode</label>
+                <input type="text" placeholder="Enter club key (e.g. CHITKARA2026)" value={form.clubKey}
+                       onChange={e => setForm(p => ({ ...p, clubKey: e.target.value }))}
+                       className="w-full bg-[#131625] border border-slate-700/70 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all font-mono" />
+                <p className="text-[10px] text-slate-500 mt-1">Ask your team lead or use default: CHITKARA2026</p>
+              </div>
             </>
           )}
 
-          <input type="email" placeholder="Email *" required value={form.email}
-                 onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
-                 className="bg-white/4 border border-white/8 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-600 focus:border-indigo-500/60 transition-all" />
-          <input type="password" placeholder="Password *" required value={form.password}
-                 onChange={e => setForm(p => ({ ...p, password: e.target.value }))}
-                 className="bg-white/4 border border-white/8 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-600 focus:border-indigo-500/60 transition-all" />
+          <div>
+            <label className="block text-[11px] font-medium text-slate-300 mb-1">Email Address</label>
+            <input type="email" placeholder="yourname@chitkara.edu.in" required value={form.email}
+                   onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
+                   className="w-full bg-[#131625] border border-slate-700/70 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all" />
+          </div>
+
+          <div>
+            <label className="block text-[11px] font-medium text-slate-300 mb-1">Password</label>
+            <input type="password" placeholder="••••••••" required value={form.password}
+                   onChange={e => setForm(p => ({ ...p, password: e.target.value }))}
+                   className="w-full bg-[#131625] border border-slate-700/70 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all" />
+          </div>
 
           {msg.text && (
             <p className={`text-xs px-3 py-2 rounded-lg ${msg.type === 'success' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'}`}>
