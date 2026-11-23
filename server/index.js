@@ -9,7 +9,23 @@ const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI || '';
 
 // Middleware
-app.use(cors({ origin: ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:3000'], credentials: true }));
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:3000',
+  'https://sagarjitbatish-22.github.io'
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.github.io')) {
+      callback(null, true);
+    } else {
+      callback(null, true);
+    }
+  },
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -37,9 +53,9 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Always start the server immediately — MongoDB connects in background
-app.listen(PORT, '127.0.0.1', () => {
-  console.log(`🚀 Code2Chill API running at http://127.0.0.1:${PORT}`);
+// Always start the server immediately on 0.0.0.0 for cloud providers (Render, Railway, etc.)
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Code2Chill API running on port ${PORT}`);
 });
 
 // Connect MongoDB if URI provided (5s timeout so it doesn't hang), else use in-memory store
