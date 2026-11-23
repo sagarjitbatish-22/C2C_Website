@@ -63,39 +63,72 @@ const initialEvents = [
 const initialTeam = [
   {
     id: "tm-1",
-    name: "Lakshay",
+    name: "Lakshay Kalra",
     role: "President",
     domain: "Leadership & Vision",
-    year: "CSE",
+    year: "Chitkara University",
     image: "",
     github: "",
-    linkedin: "",
-    quote: "Building a community where every coder finds their chill."
+    linkedin: "https://www.linkedin.com/in/lakshay-kalra-5667ba387?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
+    quote: "The backbone and the mastermind of Code2Chill, a leader and visionary that strives to take technical innovation to new heights."
   },
   {
     id: "tm-2",
-    name: "Jiya",
+    name: "Jiya Arora",
     role: "Vice President",
     domain: "Operations & Community",
-    year: "CSE",
+    year: "Chitkara University",
     image: "",
     github: "",
-    linkedin: "",
-    quote: "Empowering every member to grow, collaborate, and innovate."
+    linkedin: "https://www.linkedin.com/in/jiya-arora-13b214377?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
+    quote: "The Universal support pillar and the one that makes sure code2chill runs smoothly with no bugs in the system 😉"
   },
   {
     id: "tm-3",
-    name: "Samanyu",
-    role: "Tech Head",
+    name: "Samanyu Thakur",
+    role: "Technical Head",
     domain: "Technology & Development",
-    year: "CSE",
+    year: "Chitkara University",
     image: "",
     github: "",
-    linkedin: "",
-    quote: "Great software starts with great fundamentals."
+    linkedin: "https://www.linkedin.com/in/samanyu-thakur-76622b386?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
+    quote: "A Beast in the technical field with vast knowledge over the great spread of technical skills and a mentor that makes learning and refinement feel like a breeze."
   },
   {
     id: "tm-4",
+    name: "Bhupinder Singh",
+    role: "Technical Head",
+    domain: "Technical Core & Systems",
+    year: "Chitkara University",
+    image: "",
+    github: "",
+    linkedin: "https://www.linkedin.com/in/bhupindersinghmann?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
+    quote: "The epitome of discipline with technical knowledge that spans into the unknown, a proof that hard work and consistency never goes to waste."
+  },
+  {
+    id: "tm-5",
+    name: "Ayush Sharma",
+    role: "Content Head",
+    domain: "Content & Strategy",
+    year: "Chitkara University",
+    image: "",
+    github: "",
+    linkedin: "https://www.linkedin.com/in/ayushthisside?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
+    quote: "Mastermind of all our ideas, the one that combines creativity with his extensive technical knowledge to make sure ‘Code’ and ‘Chill’ always go hand in hand."
+  },
+  {
+    id: "tm-6",
+    name: "Tamanna Kakkar",
+    role: "Content Head",
+    domain: "Creative & Content",
+    year: "Chitkara University",
+    image: "",
+    github: "",
+    linkedin: "https://www.linkedin.com/in/tamanna-kakkar-995b73385?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
+    quote: "A beautiful combination of wits and creativity that makes sure that code2chill always stays ahead of the game and that every event is a massive success."
+  },
+  {
+    id: "tm-7",
     name: "Sagarjit Singh Batish",
     role: "Member",
     domain: "Development",

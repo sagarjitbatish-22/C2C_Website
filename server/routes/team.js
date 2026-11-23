@@ -15,8 +15,8 @@ router.get('/', async (req, res) => {
   try {
     if (isMongoConnected()) {
       let team = await Team.find().sort({ order: 1 });
-      // If DB has old placeholder team (like Aarav Mehra) or is empty, clean & sync real team
-      if (team.length === 0 || !team.some(m => m.name === 'Lakshay')) {
+      // If DB has old placeholder team or is missing full updated roster, clean & sync real team
+      if (team.length < store.team.length || !team.some(m => m.name === 'Lakshay Kalra') || !team.some(m => m.name === 'Tamanna Kakkar')) {
         await Team.deleteMany({});
         await Team.insertMany(store.team);
         team = await Team.find().sort({ order: 1 });
