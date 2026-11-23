@@ -1,0 +1,18 @@
+{
+  "name": "c2c-website",
+  "version": "1.0.0",
+  "description": "Code2Chill Club Website",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "node server/index.js",
+    "client": "npm run dev --prefix client",
+    "seed": "node server/seed.js",
+    "install:all": "npm install --prefix server && npm install --prefix client"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^10.0.7"
+  }
+}
