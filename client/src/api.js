@@ -1,5 +1,5 @@
-// API base URL — proxied through Vite dev server
-const BASE = '/api';
+// API base URL — uses VITE_API_URL if deployed, or relative /api for local dev proxy
+const BASE = import.meta.env.VITE_API_URL || '/api';
 
 // Generic fetch helper
 async function request(endpoint, options = {}) {
@@ -10,7 +10,22 @@ async function request(endpoint, options = {}) {
     ...options.headers,
   };
 
-  const res = await fetch(`${BASE}${endpoint}`, { ...options, headers });
+  const url = `${BASE}${endpoint}`;
+  let res;
+  try {
+    res = await fetch(url, { ...options, headers });
+  } catch (err) {
+    throw new Error('Unable to connect to the backend server. Please verify the server is running.');
+  }
+
+  const contentType = res.headers.get('content-type') || '';
+  if (!contentType.includes('application/json')) {
+    if (res.status === 404) {
+      throw new Error('Backend API not found. If running on GitHub Pages, the backend server must be hosted on Render or Railway.');
+    }
+    throw new Error(`Server returned non-JSON response (${res.status}).`);
+  }
+
   const data = await res.json();
 
   if (!data.success && res.status >= 400) {
