@@ -1,5 +1,5 @@
-// API base URL — uses VITE_API_URL if deployed, or relative /api for local dev proxy
-const BASE = import.meta.env.VITE_API_URL || '/api';
+// API base URL — uses live Render backend in production, /api in local dev proxy
+const BASE = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? 'https://c2c-website-xa40.onrender.com/api' : '/api');
 
 // Generic fetch helper
 async function request(endpoint, options = {}) {
