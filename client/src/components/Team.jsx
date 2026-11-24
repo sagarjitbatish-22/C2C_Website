@@ -1,6 +1,7 @@
 // Team section — fetches from API
 import { useState, useEffect, useRef } from 'react';
 import { api } from '../api';
+import { useAuth } from '../context/AuthContext';
 
 function MemberCard({ member }) {
   const ref = useRef(null);
@@ -148,8 +149,21 @@ const FALLBACK_TEAM = [
 ];
 
 export default function Team() {
+  const { user } = useAuth();
   const [team,    setTeam]    = useState(FALLBACK_TEAM);
   const [loading, setLoading] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  const [form, setForm] = useState({
+    name: '',
+    role: '',
+    domain: 'Technical Core',
+    year: 'Chitkara University',
+    linkedin: '',
+    github: '',
+    quote: ''
+  });
+  const [submitting, setSubmitting] = useState(false);
+  const [msg, setMsg] = useState('');
 
   useEffect(() => {
     api.getTeam()
@@ -164,13 +178,76 @@ export default function Team() {
       .finally(() => setLoading(false));
   }, []);
 
+  const handleAddMember = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setMsg('');
+    try {
+      const data = await api.addMember(form);
+      const newMember = data.data || { ...form, id: 'tm-' + Date.now() };
+      setTeam(prev => [...prev, newMember]);
+      setShowForm(false);
+      setForm({ name: '', role: '', domain: 'Technical Core', year: 'Chitkara University', linkedin: '', github: '', quote: '' });
+      setMsg('✅ Team member added successfully!');
+    } catch (err) {
+      setMsg('❌ ' + (err.message || 'Failed to add member'));
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <section id="team" className="py-20 px-5 max-w-6xl mx-auto">
-      <div className="mb-10">
-        <div className="text-xs font-mono text-indigo-400 mb-2 tracking-widest uppercase">Team</div>
-        <h2 className="text-3xl font-bold text-white">The builders behind C2C</h2>
-        <p className="text-sm text-slate-500 mt-2">Students, mentors, and leads making it happen at Chitkara University, Rajpura.</p>
+      <div className="mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <div className="text-xs font-mono text-indigo-400 mb-2 tracking-widest uppercase">Team</div>
+          <h2 className="text-3xl font-bold text-white">The builders behind C2C</h2>
+          <p className="text-sm text-slate-500 mt-2">Students, mentors, and leads making it happen at Chitkara University, Rajpura.</p>
+        </div>
+        {user && (
+          <button onClick={() => setShowForm(s => !s)}
+                  className="text-xs font-semibold px-4 py-2 rounded-xl border border-indigo-500/30 text-indigo-400 hover:bg-indigo-500/10 transition-all self-start sm:self-auto">
+            {showForm ? 'Cancel' : '+ Add Team Member'}
+          </button>
+        )}
       </div>
+
+      {/* Add Member Form */}
+      {showForm && user && (
+        <form onSubmit={handleAddMember} className="glass rounded-2xl p-6 mb-8 border border-indigo-500/20 animate-fade-in">
+          <h3 className="text-sm font-bold text-white mb-4">Add New Team Member</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <input type="text" placeholder="Full Name *" required value={form.name}
+                   onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
+                   className="bg-[#131625] border border-slate-700/70 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none transition-all" />
+            <input type="text" placeholder="Role (e.g. Technical Head, Design Lead) *" required value={form.role}
+                   onChange={e => setForm(p => ({ ...p, role: e.target.value }))}
+                   className="bg-[#131625] border border-slate-700/70 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none transition-all" />
+            <select value={form.domain} onChange={e => setForm(p => ({ ...p, domain: e.target.value }))}
+                    className="bg-[#131625] border border-slate-700/70 rounded-xl px-3.5 py-2 text-sm text-white focus:border-indigo-500 focus:outline-none transition-all">
+              {['Leadership & Vision','Operations & Community','Technology & Development','Technical Core & Systems','Content & Strategy','Creative & Content','AI & ML','Competitive Programming','Design & UI','Development'].map(d => <option key={d} value={d} className="bg-[#131625] text-white">{d}</option>)}
+            </select>
+            <input type="text" placeholder="Year / Department (e.g. 3rd Year, CSE / Chitkara University)" value={form.year}
+                   onChange={e => setForm(p => ({ ...p, year: e.target.value }))}
+                   className="bg-[#131625] border border-slate-700/70 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none transition-all" />
+            <input type="url" placeholder="LinkedIn Profile URL" value={form.linkedin}
+                   onChange={e => setForm(p => ({ ...p, linkedin: e.target.value }))}
+                   className="bg-[#131625] border border-slate-700/70 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none transition-all" />
+            <input type="url" placeholder="GitHub Profile URL (optional)" value={form.github}
+                   onChange={e => setForm(p => ({ ...p, github: e.target.value }))}
+                   className="bg-[#131625] border border-slate-700/70 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none transition-all" />
+          </div>
+          <textarea placeholder="Quote or description about the member…" value={form.quote}
+                    onChange={e => setForm(p => ({ ...p, quote: e.target.value }))}
+                    rows={2}
+                    className="mt-3 w-full bg-[#131625] border border-slate-700/70 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none transition-all resize-none" />
+          {msg && <p className="text-xs mt-2 text-slate-400">{msg}</p>}
+          <button type="submit" disabled={submitting}
+                  className="mt-3 px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold disabled:opacity-60 transition-all">
+            {submitting ? 'Adding…' : 'Save Member'}
+          </button>
+        </form>
+      )}
 
       {loading ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">

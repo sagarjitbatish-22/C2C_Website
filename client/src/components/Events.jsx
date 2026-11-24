@@ -165,19 +165,19 @@ export default function Events() {
                      required={f.required}
                      value={form[f.name]}
                      onChange={e => setForm(p => ({ ...p, [f.name]: e.target.value }))}
-                     className="bg-white/4 border border-white/8 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-600 focus:border-indigo-500/50 focus:bg-white/6 transition-all" />
+                     className="bg-[#131625] border border-slate-700/70 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none transition-all" />
             ))}
             <input type="date" required value={form.date} onChange={e => setForm(p => ({ ...p, date: e.target.value }))}
-                   className="bg-white/4 border border-white/8 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-600 focus:border-indigo-500/50 transition-all" />
+                   className="bg-[#131625] border border-slate-700/70 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none transition-all" />
             <select value={form.category} onChange={e => setForm(p => ({ ...p, category: e.target.value }))}
-                    className="bg-[#0F111A] border border-white/8 rounded-xl px-3 py-2 text-sm text-slate-300 focus:border-indigo-500/50 transition-all">
-              {['Workshop','Hackathon','CP Contest','Talk','Meetup'].map(c => <option key={c}>{c}</option>)}
+                    className="bg-[#131625] border border-slate-700/70 rounded-xl px-3.5 py-2 text-sm text-white focus:border-indigo-500 focus:outline-none transition-all">
+              {['Workshop','Hackathon','CP Contest','Talk','Meetup'].map(c => <option key={c} value={c} className="bg-[#131625] text-white">{c}</option>)}
             </select>
           </div>
           <textarea placeholder="Description…" required value={form.description}
                     onChange={e => setForm(p => ({ ...p, description: e.target.value }))}
                     rows={3}
-                    className="mt-3 w-full bg-white/4 border border-white/8 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-600 focus:border-indigo-500/50 transition-all resize-none" />
+                    className="mt-3 w-full bg-[#131625] border border-slate-700/70 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none transition-all resize-none" />
           {msg && <p className="text-xs mt-2 text-slate-400">{msg}</p>}
           <button type="submit" disabled={submitting}
                   className="mt-3 px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold disabled:opacity-60 transition-all">
