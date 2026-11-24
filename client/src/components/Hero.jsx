@@ -1,5 +1,6 @@
 // Hero section with animated particles + typing effect
 import { useEffect, useRef, useState } from 'react';
+import c2cLogo from '../assets/c2c-logo.jpg';
 
 const TYPED_STRINGS = [
   'hack without limits.',
@@ -135,8 +136,8 @@ export default function Hero({ onQueryClick }) {
 
       <div className="relative z-10 text-center px-5 max-w-3xl mx-auto">
         {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 mb-6 rounded-full border border-indigo-500/25 bg-indigo-500/8 text-indigo-300 text-xs font-medium animate-fade-in">
-          <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
+        <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 mb-6 rounded-full border border-indigo-500/25 bg-indigo-500/8 text-indigo-300 text-xs font-medium animate-fade-in shadow-lg shadow-indigo-950/40">
+          <img src={c2cLogo} alt="Code2Chill" className="w-4 h-4 rounded-full object-cover ring-1 ring-indigo-400/30" />
           Official Tech Club · Chitkara University, Rajpura
         </div>
 
