@@ -9,10 +9,12 @@ import Instagram   from './components/Instagram';
 import Footer      from './components/Footer';
 import QueryModal  from './components/QueryModal';
 import AuthModal   from './components/AuthModal';
+import AdminQueriesModal from './components/AdminQueriesModal';
 
 export default function App() {
   const [queryOpen, setQueryOpen] = useState(false);
   const [authOpen,  setAuthOpen]  = useState(false);
+  const [adminQueriesOpen, setAdminQueriesOpen] = useState(false);
 
   return (
     <AuthProvider>
@@ -29,6 +31,7 @@ export default function App() {
       <Navbar
         onAuthClick={() => setAuthOpen(true)}
         onQueryClick={() => setQueryOpen(true)}
+        onAdminQueriesClick={() => setAdminQueriesOpen(true)}
       />
 
       <main>
@@ -42,6 +45,7 @@ export default function App() {
 
       <QueryModal open={queryOpen} onClose={() => setQueryOpen(false)} />
       <AuthModal  open={authOpen}  onClose={() => setAuthOpen(false)}  />
+      <AdminQueriesModal open={adminQueriesOpen} onClose={() => setAdminQueriesOpen(false)} />
     </AuthProvider>
   );
 }

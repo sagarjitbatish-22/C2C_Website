@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const { store } = require('../storage');
 const Query = require('../models/Query');
-const { authMiddleware } = require('../middleware/auth');
+const { adminMiddleware } = require('../middleware/auth');
 
 const isMongoConnected = () => {
   const mongoose = require('mongoose');
@@ -66,8 +66,8 @@ router.post('/', async (req, res) => {
   }
 });
 
-// GET /api/queries - View all submitted queries (Team Members only)
-router.get('/', authMiddleware, async (req, res) => {
+// GET /api/queries - View all submitted queries (Admin only: Sagarjit)
+router.get('/', adminMiddleware, async (req, res) => {
   try {
     if (isMongoConnected()) {
       const queries = await Query.find().sort({ createdAt: -1 });
@@ -80,8 +80,8 @@ router.get('/', authMiddleware, async (req, res) => {
   }
 });
 
-// PATCH /api/queries/:id/reply - Team member replies or updates query status
-router.patch('/:id/reply', authMiddleware, async (req, res) => {
+// PATCH /api/queries/:id/reply - Update query status or reply (Admin only: Sagarjit)
+router.patch('/:id/reply', adminMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
     const { reply, status } = req.body;

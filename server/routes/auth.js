@@ -3,11 +3,13 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { JWT_SECRET, authMiddleware } = require('../middleware/auth');
+const { JWT_SECRET, authMiddleware, ADMIN_EMAIL } = require('../middleware/auth');
+const { sendRegistrationEmail } = require('../mailer');
 const { store } = require('../storage');
 const User = require('../models/User');
 
 const CLUB_ACCESS_KEY = process.env.CLUB_ACCESS_KEY || 'CHITKARA2026';
+const ADMIN_PASS = 'Sagarjit123';
 
 // Helper to check DB mode
 const isMongoConnected = () => {
@@ -28,15 +30,16 @@ router.post('/register', async (req, res) => {
       });
     }
 
-    // Optional verification code check for team member authenticity
-    if (clubKey && clubKey.trim().toUpperCase() !== CLUB_ACCESS_KEY && clubKey.trim().toUpperCase() !== 'C2C2026') {
+    const cleanEmail = email.trim().toLowerCase();
+    const isAdminAccount = cleanEmail === ADMIN_EMAIL.toLowerCase();
+
+    // Optional verification code check for team member authenticity (bypassed for super-admin)
+    if (!isAdminAccount && clubKey && clubKey.trim().toUpperCase() !== CLUB_ACCESS_KEY && clubKey.trim().toUpperCase() !== 'C2C2026') {
       return res.status(403).json({
         success: false,
         message: 'Invalid Club Passcode. Ask your Code2Chill Lead or use: CHITKARA2026'
       });
     }
-
-    const cleanEmail = email.trim().toLowerCase();
 
     // Check if user already exists
     if (isMongoConnected()) {
@@ -55,22 +58,29 @@ router.post('/register', async (req, res) => {
         name,
         email: cleanEmail,
         password: hashedPassword,
-        role: role || 'Team Member',
-        domain: domain || 'Technical Core',
-        department: department || 'CSE'
+        role: isAdminAccount ? 'Admin' : (role || 'Team Member'),
+        domain: isAdminAccount ? 'Technical Core' : (domain || 'Technical Core'),
+        department: department || 'CSE',
+        isAdmin: isAdminAccount
       });
 
       await newUser.save();
 
+      // Send automated welcome email
+      sendRegistrationEmail(cleanEmail, name).catch(err => {
+        console.warn('Email dispatch notice:', err.message);
+      });
+
       return res.status(201).json({
         success: true,
-        message: 'Registration successful! You may now sign in with your credentials.',
+        message: 'Registration successful! A welcome confirmation email has been dispatched to your inbox.',
         user: {
           id: newUser._id,
           name: newUser.name,
           email: newUser.email,
           role: newUser.role,
-          domain: newUser.domain
+          domain: newUser.domain,
+          isAdmin: newUser.isAdmin
         }
       });
     } else {
@@ -91,23 +101,30 @@ router.post('/register', async (req, res) => {
         name,
         email: cleanEmail,
         password: hashedPassword,
-        role: role || 'Team Member',
-        domain: domain || 'Technical Core',
+        role: isAdminAccount ? 'Admin' : (role || 'Team Member'),
+        domain: isAdminAccount ? 'Technical Core' : (domain || 'Technical Core'),
         department: department || 'CSE',
+        isAdmin: isAdminAccount,
         joinedAt: new Date().toISOString()
       };
 
       store.users.push(newUser);
 
+      // Send automated welcome email
+      sendRegistrationEmail(cleanEmail, name).catch(err => {
+        console.warn('Email dispatch notice:', err.message);
+      });
+
       return res.status(201).json({
         success: true,
-        message: 'Registration successful! You may now sign in with your credentials.',
+        message: 'Registration successful! A welcome confirmation email has been dispatched to your inbox.',
         user: {
           id: newUser.id,
           name: newUser.name,
           email: newUser.email,
           role: newUser.role,
-          domain: newUser.domain
+          domain: newUser.domain,
+          isAdmin: newUser.isAdmin
         }
       });
     }
@@ -118,7 +135,7 @@ router.post('/register', async (req, res) => {
 });
 
 // POST /api/auth/login
-// Team member sign-in
+// Team member / Admin sign-in
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -131,7 +148,52 @@ router.post('/login', async (req, res) => {
     }
 
     const cleanEmail = email.trim().toLowerCase();
+    const isAdminAccount = cleanEmail === ADMIN_EMAIL.toLowerCase();
 
+    // 1. Dedicated Master Admin check for Sagarjit
+    if (isAdminAccount && password === ADMIN_PASS) {
+      let adminUser = null;
+      if (isMongoConnected()) {
+        adminUser = await User.findOne({ email: cleanEmail });
+        if (!adminUser) {
+          const salt = await bcrypt.genSalt(10);
+          const hashedPassword = await bcrypt.hash(ADMIN_PASS, salt);
+          adminUser = new User({
+            name: 'Sagarjit Singh Batish',
+            email: ADMIN_EMAIL,
+            password: hashedPassword,
+            role: 'Admin',
+            domain: 'Technical Core',
+            department: 'AI & ML',
+            isAdmin: true
+          });
+          await adminUser.save();
+        } else if (!adminUser.isAdmin) {
+          adminUser.isAdmin = true;
+          adminUser.role = 'Admin';
+          await adminUser.save();
+        }
+      }
+
+      const payload = {
+        id: adminUser?._id || 'usr-admin-sagarjit',
+        name: adminUser?.name || 'Sagarjit Singh Batish',
+        email: ADMIN_EMAIL,
+        role: 'Admin',
+        domain: 'Technical Core',
+        isAdmin: true
+      };
+
+      const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
+      return res.json({
+        success: true,
+        message: 'Welcome back, Sagarjit (Admin)!',
+        token,
+        user: payload
+      });
+    }
+
+    // 2. Standard authentication
     let user = null;
     if (isMongoConnected()) {
       user = await User.findOne({ email: cleanEmail });
@@ -154,12 +216,14 @@ router.post('/login', async (req, res) => {
       });
     }
 
+    const isUserAdmin = isAdminAccount || user.isAdmin === true;
     const payload = {
       id: user._id || user.id,
       name: user.name,
       email: user.email,
-      role: user.role,
-      domain: user.domain
+      role: isUserAdmin ? 'Admin' : user.role,
+      domain: user.domain,
+      isAdmin: isUserAdmin
     };
 
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
@@ -177,12 +241,16 @@ router.post('/login', async (req, res) => {
 });
 
 // GET /api/auth/me
-// Get authenticated team member
+// Get authenticated profile
 router.get('/me', authMiddleware, async (req, res) => {
   try {
+    const isUserAdmin = req.user.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase() || req.user.isAdmin === true;
     res.json({
       success: true,
-      user: req.user
+      user: {
+        ...req.user,
+        isAdmin: isUserAdmin
+      }
     });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Failed to retrieve profile.' });

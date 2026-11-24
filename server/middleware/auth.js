@@ -2,6 +2,7 @@
 const jwt = require('jsonwebtoken');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'code2chill_chitkara_secret_key_2026';
+const ADMIN_EMAIL = 'sagarjit2174.beaiml26@gmail.com';
 
 function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
@@ -19,7 +20,28 @@ function authMiddleware(req, res, next) {
   }
 }
 
+// Restricts operations exclusively to Sagarjit (sagarjit2174.beaiml26@gmail.com)
+function adminMiddleware(req, res, next) {
+  authMiddleware(req, res, () => {
+    const isAuthorized = req.user && (
+      req.user.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase() ||
+      req.user.isAdmin === true
+    );
+
+    if (isAuthorized) {
+      return next();
+    }
+
+    return res.status(403).json({
+      success: false,
+      message: `Access denied: Only administrator (${ADMIN_EMAIL}) can perform this action.`
+    });
+  });
+}
+
 module.exports = {
   authMiddleware,
+  adminMiddleware,
+  ADMIN_EMAIL,
   JWT_SECRET
 };

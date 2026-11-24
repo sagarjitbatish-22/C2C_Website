@@ -9,10 +9,12 @@ const NAV_LINKS = [
   { label: 'Instagram', href: '#instagram' },
 ];
 
-export default function Navbar({ onAuthClick, onQueryClick }) {
+export default function Navbar({ onAuthClick, onQueryClick, onAdminQueriesClick }) {
   const { user, logout } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const isAdmin = user && (user.isAdmin === true || user.email?.toLowerCase() === 'sagarjit2174.beaiml26@gmail.com');
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -56,9 +58,19 @@ export default function Navbar({ onAuthClick, onQueryClick }) {
             Ask Query
           </button>
 
+          {isAdmin && (
+            <button
+              onClick={onAdminQueriesClick}
+              className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 hover:bg-indigo-500/20 transition-all flex items-center gap-1.5">
+              📬 Student Queries
+            </button>
+          )}
+
           {user ? (
             <div className="flex items-center gap-2">
-              <span className="text-xs text-indigo-400 font-medium max-w-[120px] truncate">{user.name}</span>
+              <span className="text-xs text-indigo-400 font-medium max-w-[140px] truncate flex items-center gap-1">
+                {isAdmin ? '👑 ' : ''}{user.name}
+              </span>
               <button
                 onClick={logout}
                 className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 transition-all">
@@ -94,22 +106,31 @@ export default function Navbar({ onAuthClick, onQueryClick }) {
               {l.label}
             </a>
           ))}
-          <div className="flex gap-2 pt-2 border-t border-white/5">
-            <button onClick={() => { onQueryClick(); setMenuOpen(false); }}
-                    className="flex-1 text-xs font-semibold py-2 rounded-lg border border-white/10 text-slate-300">
-              Ask Query
-            </button>
-            {user ? (
-              <button onClick={() => { logout(); setMenuOpen(false); }}
-                      className="flex-1 text-xs font-semibold py-2 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400">
-                Logout
-              </button>
-            ) : (
-              <button onClick={() => { onAuthClick(); setMenuOpen(false); }}
-                      className="flex-1 text-xs font-semibold py-2 rounded-lg bg-indigo-600 text-white">
-                Team Login
+          <div className="flex flex-col gap-2 pt-2 border-t border-white/5">
+            {isAdmin && (
+              <button
+                onClick={() => { onAdminQueriesClick(); setMenuOpen(false); }}
+                className="w-full text-xs font-semibold py-2 rounded-lg bg-indigo-500/15 border border-indigo-500/30 text-indigo-300">
+                📬 View Student Queries
               </button>
             )}
+            <div className="flex gap-2">
+              <button onClick={() => { onQueryClick(); setMenuOpen(false); }}
+                      className="flex-1 text-xs font-semibold py-2 rounded-lg border border-white/10 text-slate-300">
+                Ask Query
+              </button>
+              {user ? (
+                <button onClick={() => { logout(); setMenuOpen(false); }}
+                        className="flex-1 text-xs font-semibold py-2 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400">
+                  Logout
+                </button>
+              ) : (
+                <button onClick={() => { onAuthClick(); setMenuOpen(false); }}
+                        className="flex-1 text-xs font-semibold py-2 rounded-lg bg-indigo-600 text-white">
+                  Team Login
+                </button>
+              )}
+            </div>
           </div>
         </div>
       )}

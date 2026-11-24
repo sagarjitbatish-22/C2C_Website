@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const { store } = require('../storage');
 const Event = require('../models/Event');
-const { authMiddleware } = require('../middleware/auth');
+const { adminMiddleware } = require('../middleware/auth');
 
 const isMongoConnected = () => {
   const mongoose = require('mongoose');
@@ -23,8 +23,8 @@ router.get('/', async (req, res) => {
   }
 });
 
-// POST /api/events - Create new event (Team Member only)
-router.post('/', authMiddleware, async (req, res) => {
+// POST /api/events - Create new event (Admin only: Sagarjit)
+router.post('/', adminMiddleware, async (req, res) => {
   try {
     const { title, tagline, description, category, date, time, venue, status, tags } = req.body;
 
@@ -96,8 +96,8 @@ router.post('/:id/rsvp', async (req, res) => {
   }
 });
 
-// DELETE /api/events/:id - Delete event (Team Member only)
-router.delete('/:id', authMiddleware, async (req, res) => {
+// DELETE /api/events/:id - Delete event (Admin only: Sagarjit)
+router.delete('/:id', adminMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
     if (isMongoConnected()) {

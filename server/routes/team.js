@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const { store } = require('../storage');
 const Team = require('../models/Team');
-const { authMiddleware } = require('../middleware/auth');
+const { adminMiddleware } = require('../middleware/auth');
 
 const isMongoConnected = () => {
   const mongoose = require('mongoose');
@@ -29,8 +29,8 @@ router.get('/', async (req, res) => {
   }
 });
 
-// POST /api/team - Add team member (Team Lead / Auth only)
-router.post('/', authMiddleware, async (req, res) => {
+// POST /api/team - Add team member (Admin only: Sagarjit)
+router.post('/', adminMiddleware, async (req, res) => {
   try {
     const { name, role, domain, year, image, github, linkedin, quote } = req.body;
     if (!name || !role || !domain) {

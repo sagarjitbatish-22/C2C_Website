@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema({
   domain: { type: String, default: 'Technical' },
   department: { type: String, default: 'CSE' },
   rollNumber: { type: String, default: '' },
+  isAdmin: { type: Boolean, default: false },
   joinedAt: { type: Date, default: Date.now }
 });
 

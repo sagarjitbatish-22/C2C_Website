@@ -150,6 +150,7 @@ const FALLBACK_TEAM = [
 
 export default function Team() {
   const { user } = useAuth();
+  const isAdmin = user && (user.isAdmin === true || user.email?.toLowerCase() === 'sagarjit2174.beaiml26@gmail.com');
   const [team,    setTeam]    = useState(FALLBACK_TEAM);
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
@@ -204,7 +205,7 @@ export default function Team() {
           <h2 className="text-3xl font-bold text-white">The builders behind C2C</h2>
           <p className="text-sm text-slate-500 mt-2">Students, mentors, and leads making it happen at Chitkara University, Rajpura.</p>
         </div>
-        {user && (
+        {isAdmin && (
           <button onClick={() => setShowForm(s => !s)}
                   className="text-xs font-semibold px-4 py-2 rounded-xl border border-indigo-500/30 text-indigo-400 hover:bg-indigo-500/10 transition-all self-start sm:self-auto">
             {showForm ? 'Cancel' : '+ Add Team Member'}
@@ -213,7 +214,7 @@ export default function Team() {
       </div>
 
       {/* Add Member Form */}
-      {showForm && user && (
+      {showForm && isAdmin && (
         <form onSubmit={handleAddMember} className="glass rounded-2xl p-6 mb-8 border border-indigo-500/20 animate-fade-in">
           <h3 className="text-sm font-bold text-white mb-4">Add New Team Member</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

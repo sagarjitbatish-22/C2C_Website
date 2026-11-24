@@ -91,6 +91,7 @@ function EventCard({ event, onRsvp }) {
 
 export default function Events() {
   const { user } = useAuth();
+  const isAdmin = user && (user.isAdmin === true || user.email?.toLowerCase() === 'sagarjit2174.beaiml26@gmail.com');
   const [events,   setEvents]   = useState([]);
   const [loading,  setLoading]  = useState(true);
   const [filter,   setFilter]   = useState('All');
@@ -138,7 +139,7 @@ export default function Events() {
         <div className="text-xs font-mono text-indigo-400 mb-2 tracking-widest uppercase">Events</div>
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <h2 className="text-3xl font-bold text-white">What we're up to</h2>
-          {user && (
+          {isAdmin && (
             <button onClick={() => setShowForm(s => !s)}
                     className="text-xs font-semibold px-4 py-2 rounded-xl border border-indigo-500/30 text-indigo-400 hover:bg-indigo-500/10 transition-all self-start sm:self-auto">
               {showForm ? 'Cancel' : '+ Add Event'}
@@ -148,7 +149,7 @@ export default function Events() {
       </div>
 
       {/* Add event form */}
-      {showForm && user && (
+      {showForm && isAdmin && (
         <form onSubmit={handleCreate} className="glass rounded-2xl p-6 mb-8 border border-indigo-500/20 animate-fade-in">
           <h3 className="text-sm font-bold text-white mb-4">Publish New Event</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
