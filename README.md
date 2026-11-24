@@ -26,7 +26,7 @@ Code2Chill is the official technical club of Chitkara University, Rajpura. This 
 
 ## ✨ Features
 
-| For visitors | For team members |
+| For visitors | For admin |
 | --- | --- |
 | 📅 Browse upcoming events and **RSVP** | 🔐 Secure sign-in with **JWT** authentication |
 | 👥 Team showcase | ➕ Add and publish new events |
