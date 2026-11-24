@@ -16,18 +16,26 @@ const allowedOrigins = [
   'https://sagarjitbatish-22.github.io'
 ];
 
+// Extra allowed origins (e.g. a custom domain) can be set via ALLOWED_ORIGINS="https://a.com,https://b.com"
+const extraOrigins = (process.env.ALLOWED_ORIGINS || '').split(',').map(o => o.trim()).filter(Boolean);
+const corsAllowList = new Set([...allowedOrigins, ...extraOrigins]);
+
+// Render / Railway sit behind a proxy; this makes req.ip (used by the rate limiter) the real client IP
+app.set('trust proxy', 1);
+app.disable('x-powered-by');
+
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.github.io')) {
+    // No Origin header = same-origin / curl / server-to-server, which CORS doesn't apply to
+    if (!origin || corsAllowList.has(origin)) {
       callback(null, true);
     } else {
-      callback(null, true);
+      callback(null, false);
     }
-  },
-  credentials: true
+  }
 }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '50kb' }));
+app.use(express.urlencoded({ extended: true, limit: '50kb' }));
 
 // Routes
 const authRoutes = require('./routes/auth');

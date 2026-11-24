@@ -1,5 +1,7 @@
 # Code2Chill — Official Club Website
 
+<div align="center">
+
 **The home of the Code2Chill tech club at Chitkara University, Rajpura.**
 Campus hackathons, team showcase, events hub and community connect, all in one MERN stack platform.
 
@@ -122,7 +124,20 @@ Create or edit `server/.env`:
 ````env
 # Optional: leave unset to use in-memory storage (data resets on restart)
 MONGO_URI=mongodb+srv://<user>:<password>@cluster.mongodb.net/code2chill
+
+# Required in production. Use long random values and never commit them.
+JWT_SECRET=<long-random-string>
+ADMIN_PASSWORD=<strong-password-for-the-admin-account>
+CLUB_ACCESS_KEY=<passcode-new-team-members-must-enter>
+
+# Optional
+ADMIN_EMAIL=<admin-account-email>
+ALLOWED_ORIGINS=https://your-custom-domain.com
+EMAIL_USER=<gmail-address>
+EMAIL_PASS=<gmail-app-password>
 ````
+
+If `ADMIN_PASSWORD` is not set, admin login is disabled. If `CLUB_ACCESS_KEY` is not set, team registration is closed. If `JWT_SECRET` is not set, a temporary random secret is used and everyone is logged out on each restart.
 
 ### Enabling persistent storage (MongoDB)
 
@@ -139,7 +154,7 @@ The app is deployed on [Render](https://render.com).
 | --- | --- |
 | Build command | `npm install && npm install --prefix client && npm install --prefix server && npm run build --prefix client` |
 | Start command | `npm start --prefix server` |
-| Environment variables | `MONGO_URI` (your Atlas connection string) |
+| Environment variables | `MONGO_URI`, `JWT_SECRET`, `ADMIN_PASSWORD`, `CLUB_ACCESS_KEY` (see Configuration) |
 
 > ⚠️ Without `MONGO_URI`, the app uses in-memory storage, so events, team members and queries **reset every time Render restarts or redeploys** the service. Set `MONGO_URI` for anything you want to keep.
 
@@ -209,5 +224,3 @@ Made with ❤️ by the **Code2Chill** team · Chitkara University, Rajpura
 ⭐ If you like this project, give it a star!
 
 </div>
-````
-````

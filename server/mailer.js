@@ -14,12 +14,19 @@ const createTransporter = () => {
   return null;
 };
 
-const sendRegistrationEmail = async (toEmail, userName) => {
+// Escape user-supplied text before putting it into the HTML email body
+const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => (
+  { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+));
+
+const sendRegistrationEmail = async (toEmail, rawUserName) => {
+  const userName = escapeHtml(rawUserName);
+  toEmail = String(toEmail).replace(/[\r\n]/g, '');
   const transporter = createTransporter();
   const mailOptions = {
     from: `"Code2Chill Tech Club" <${process.env.EMAIL_USER || 'code2chill.chitkara@gmail.com'}>`,
     to: toEmail,
-    subject: `🎉 Registration Successful - Welcome to Code2Chill, ${userName}!`,
+    subject: `🎉 Registration Successful - Welcome to Code2Chill, ${String(rawUserName).replace(/[\r\n]/g, ' ')}!`,
     html: `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #08090D; color: #ffffff; padding: 32px 16px; min-height: 100%;">
         <div style="max-width: 580px; margin: 0 auto; background-color: #10121F; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">

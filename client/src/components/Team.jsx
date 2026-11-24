@@ -21,7 +21,7 @@ function MemberCard({ member }) {
           src={member.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=1a1b2e&color=818CF8&size=120`}
           alt={member.name}
           className="w-16 h-16 rounded-2xl object-cover ring-2 ring-white/8"
-          onError={e => { e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=1a1b2e&color=818CF8&size=120`; }}
+          onError={e => { e.target.onerror = null; e.target.src =`https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=1a1b2e&color=818CF8&size=120`; }}
         />
         <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-indigo-600/90 flex items-center justify-center">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">

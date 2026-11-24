@@ -15,9 +15,9 @@ router.get('/', async (req, res) => {
   try {
     if (isMongoConnected()) {
       let team = await Team.find().sort({ order: 1 });
-      // If DB has old placeholder team or is missing full updated roster, clean & sync real team
-      if (team.length < store.team.length || !team.some(m => m.name === 'Lakshay Kalra') || !team.some(m => m.name === 'Tamanna Kakkar')) {
-        await Team.deleteMany({});
+      // Seed the default roster only when the collection is empty.
+      // (Previously any public GET could wipe the whole collection, including members added by the admin.)
+      if (team.length === 0) {
         await Team.insertMany(store.team);
         team = await Team.find().sort({ order: 1 });
       }

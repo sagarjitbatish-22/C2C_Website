@@ -105,10 +105,10 @@ export default function AuthModal({ open, onClose }) {
 
               <div>
                 <label className="block text-[11px] font-medium text-slate-300 mb-1">Club Passcode</label>
-                <input type="text" placeholder="Enter club key (e.g. CHITKARA2026)" value={form.clubKey}
+                <input type="password" placeholder="Enter club passcode" required autoComplete="off" value={form.clubKey}
                        onChange={e => setForm(p => ({ ...p, clubKey: e.target.value }))}
                        className="w-full bg-[#131625] border border-slate-700/70 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all font-mono" />
-                <p className="text-[10px] text-slate-500 mt-1">Ask your team lead or use default: CHITKARA2026</p>
+                <p className="text-[10px] text-slate-500 mt-1">Ask your Code2Chill team lead for the passcode.</p>
               </div>
             </>
           )}
@@ -122,7 +122,9 @@ export default function AuthModal({ open, onClose }) {
 
           <div>
             <label className="block text-[11px] font-medium text-slate-300 mb-1">Password</label>
-            <input type="password" placeholder="••••••••" required value={form.password}
+            <input type="password" placeholder={mode === 'register' ? 'At least 8 characters' : '••••••••'} required
+                   minLength={mode === 'register' ? 8 : undefined} maxLength={128}
+                   autoComplete={mode === 'register' ? 'new-password' : 'current-password'} value={form.password}
                    onChange={e => setForm(p => ({ ...p, password: e.target.value }))}
                    className="w-full bg-[#131625] border border-slate-700/70 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all" />
           </div>

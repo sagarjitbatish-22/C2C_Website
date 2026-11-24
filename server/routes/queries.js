@@ -3,23 +3,35 @@ const express = require('express');
 const router = express.Router();
 const { store } = require('../storage');
 const Query = require('../models/Query');
-const { adminMiddleware } = require('../middleware/auth');
+const { adminMiddleware, rateLimit } = require('../middleware/auth');
 
 const isMongoConnected = () => {
   const mongoose = require('mongoose');
   return mongoose.connection.readyState === 1;
 };
 
+// Public endpoint: limit spam (5 queries per 10 minutes per IP)
+const queryLimiter = rateLimit({ windowMs: 10 * 60 * 1000, max: 5, message: 'Too many queries submitted. Please try again in a few minutes.' });
+
 // POST /api/queries - Submit a new query (Public "Ask Query" button)
-router.post('/', async (req, res) => {
+router.post('/', queryLimiter, async (req, res) => {
   try {
     const { name, email, rollNumber, category, subject, message } = req.body;
 
-    if (!name || !email || !subject || !message) {
+    if (![name, email, subject, message].every(v => typeof v === 'string' && v.trim())) {
       return res.status(400).json({
         success: false,
         message: 'Name, email, subject, and message are mandatory.'
       });
+    }
+
+    if (name.length > 100 || email.length > 254 || subject.length > 200 || message.length > 3000 ||
+        (rollNumber && String(rollNumber).length > 30) || (category && String(category).length > 50)) {
+      return res.status(400).json({ success: false, message: 'One or more fields are too long.' });
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      return res.status(400).json({ success: false, message: 'Please enter a valid email address.' });
     }
 
     if (isMongoConnected()) {

@@ -3,7 +3,10 @@ const express = require('express');
 const router = express.Router();
 const { store } = require('../storage');
 const Event = require('../models/Event');
-const { adminMiddleware } = require('../middleware/auth');
+const { adminMiddleware, rateLimit } = require('../middleware/auth');
+
+// RSVP is public; stop one IP from spamming the counter
+const rsvpLimiter = rateLimit({ windowMs: 10 * 60 * 1000, max: 20, message: 'Too many RSVPs. Please slow down.' });
 
 const isMongoConnected = () => {
   const mongoose = require('mongoose');
@@ -72,7 +75,7 @@ router.post('/', adminMiddleware, async (req, res) => {
 });
 
 // POST /api/events/:id/rsvp - RSVP to an event
-router.post('/:id/rsvp', async (req, res) => {
+router.post('/:id/rsvp', rsvpLimiter, async (req, res) => {
   try {
     const { id } = req.params;
     if (isMongoConnected()) {
